@@ -18,6 +18,7 @@
     <div class="container nav">
       <a href="#" class="logo">Lumen<span>Data</span></a>
       <nav class="nav-links">
+        <a href="#decisions">Decisions</a>
         <a href="#services">Services</a>
         <a href="#approach">Approach</a>
         <a href="#contact">Contact</a>
@@ -33,6 +34,73 @@
         <h1>Turn your data into decisions.</h1>
         <p>We help growing companies build reliable data pipelines, clear dashboards, and models that answer real business questions.</p>
         <a href="#contact" class="btn">Book a free consultation</a>
+      </div>
+    </section>
+
+    <section id="decisions" class="section alt">
+      <div class="container">
+        <h2>From data to decisions</h2>
+        <p class="section-intro">We connect your scattered data to the calls your leaders make every week, so every decision has evidence behind it. Pick a decision to see where it comes from.</p>
+        <div class="flow">
+          <svg class="flow-lines" aria-hidden="true"></svg>
+
+          <div class="flow-stage" data-stage="sources">
+            <h3 class="flow-label">Your data</h3>
+            <div class="flow-nodes">
+              <div class="flow-node" data-node="crm"><span class="flow-title">CRM</span></div>
+              <div class="flow-node" data-node="erp"><span class="flow-title">ERP</span></div>
+              <div class="flow-node" data-node="web"><span class="flow-title">Web analytics</span></div>
+              <div class="flow-node" data-node="sheets"><span class="flow-title">Spreadsheets</span></div>
+            </div>
+          </div>
+
+          <div class="flow-stage" data-stage="pipeline">
+            <h3 class="flow-label">Pipeline</h3>
+            <div class="flow-nodes">
+              <div class="flow-node" data-node="pipeline">
+                <span class="flow-title">Clean &amp; unify</span>
+                <small>One trusted warehouse</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-stage" data-stage="insights">
+            <h3 class="flow-label">Insights</h3>
+            <div class="flow-nodes">
+              <div class="flow-node" data-node="forecast">
+                <span class="flow-title">Demand forecast</span>
+                <small>What happens next</small>
+              </div>
+              <div class="flow-node" data-node="segments">
+                <span class="flow-title">Customer segments</span>
+                <small>Who matters most</small>
+              </div>
+              <div class="flow-node" data-node="anomalies">
+                <span class="flow-title">Anomaly alerts</span>
+                <small>What changed, and why</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-stage" data-stage="decisions">
+            <h3 class="flow-label">Decisions</h3>
+            <div class="flow-nodes">
+              <button class="flow-node" data-node="budget" data-uses="forecast segments">
+                <span class="flow-title">Reallocate budget</span>
+                <small>Shift spend to what converts</small>
+              </button>
+              <button class="flow-node" data-node="inventory" data-uses="forecast anomalies">
+                <span class="flow-title">Adjust inventory</span>
+                <small>Stock ahead of demand</small>
+              </button>
+              <button class="flow-node" data-node="accounts" data-uses="segments anomalies">
+                <span class="flow-title">Prioritize accounts</span>
+                <small>Act before customers churn</small>
+              </button>
+            </div>
+          </div>
+        </div>
+        <p class="flow-caption" role="status"></p>
       </div>
     </section>
 

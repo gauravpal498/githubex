@@ -43,6 +43,119 @@ themeToggle.addEventListener("click", () => {
 prefersDark.addEventListener("change", updateThemeButton);
 updateThemeButton();
 
+// Data-to-decision flow
+const flow = document.querySelector(".flow");
+const flowLines = flow.querySelector(".flow-lines");
+const flowCaption = document.querySelector(".flow-caption");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+const flowNode = (id) => flow.querySelector(`[data-node="${id}"]`);
+const stageNodes = (stage) => [...flow.querySelectorAll(`[data-stage="${stage}"] .flow-node`)];
+const titleOf = (node) => node.querySelector(".flow-title").textContent;
+
+const sources = stageNodes("sources");
+const pipeline = flowNode("pipeline");
+const insights = stageNodes("insights");
+const decisions = stageNodes("decisions");
+
+// Every connector in the diagram, from left to right
+const edges = [
+  ...sources.map((source) => ({ from: source, to: pipeline })),
+  ...insights.map((insight) => ({ from: pipeline, to: insight })),
+  ...decisions.flatMap((decision) =>
+    decision.dataset.uses.split(" ").map((id) => ({ from: flowNode(id), to: decision }))
+  ),
+];
+
+let activeDecision = null;
+
+function drawConnectors() {
+  const box = flow.getBoundingClientRect();
+  const stacked = getComputedStyle(flow).gridTemplateColumns.split(" ").length === 1;
+  flowLines.replaceChildren();
+
+  edges.forEach((edge) => {
+    const a = edge.from.getBoundingClientRect();
+    const b = edge.to.getBoundingClientRect();
+    let d;
+    if (stacked) {
+      const x1 = a.left + a.width / 2 - box.left;
+      const y1 = a.bottom - box.top;
+      const x2 = b.left + b.width / 2 - box.left;
+      const y2 = b.top - box.top;
+      const mid = (y1 + y2) / 2;
+      d = `M${x1},${y1} C${x1},${mid} ${x2},${mid} ${x2},${y2}`;
+    } else {
+      const x1 = a.right - box.left;
+      const y1 = a.top + a.height / 2 - box.top;
+      const x2 = b.left - box.left;
+      const y2 = b.top + b.height / 2 - box.top;
+      const mid = (x1 + x2) / 2;
+      d = `M${x1},${y1} C${mid},${y1} ${mid},${y2} ${x2},${y2}`;
+    }
+    edge.path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    edge.path.setAttribute("d", d);
+    flowLines.appendChild(edge.path);
+  });
+
+  if (activeDecision) highlight(activeDecision);
+}
+
+function highlight(decision) {
+  activeDecision = decision;
+  const used = decision.dataset.uses.split(" ").map(flowNode);
+  const lineage = new Set([decision, ...used, pipeline, ...sources]);
+
+  flow.classList.add("has-active");
+  flow.querySelectorAll(".flow-node").forEach((node) => {
+    node.classList.toggle("active", lineage.has(node));
+  });
+  edges.forEach((edge) => {
+    if (edge.path) edge.path.classList.toggle("active", lineage.has(edge.from) && lineage.has(edge.to));
+  });
+
+  flowCaption.innerHTML =
+    `<strong>${titleOf(decision)}</strong> ← ${used.map(titleOf).join(" + ")}` +
+    ` ← ${sources.length} data sources, cleaned and unified`;
+}
+
+// Cycle through the decisions until the visitor picks one
+let cycleTimer = null;
+
+function stopCycle() {
+  clearInterval(cycleTimer);
+}
+
+function startCycle() {
+  stopCycle();
+  if (reduceMotion.matches) return;
+  cycleTimer = setInterval(() => {
+    const next = (decisions.indexOf(activeDecision) + 1) % decisions.length;
+    highlight(decisions[next]);
+  }, 3000);
+}
+
+decisions.forEach((decision) => {
+  ["mouseenter", "focus", "click"].forEach((type) => {
+    decision.addEventListener(type, () => {
+      stopCycle();
+      highlight(decision);
+    });
+  });
+});
+
+flow.addEventListener("mouseleave", () => {
+  if (!flow.contains(document.activeElement)) startCycle();
+});
+
+flow.addEventListener("focusout", (event) => {
+  if (!flow.contains(event.relatedTarget)) startCycle();
+});
+
+new ResizeObserver(drawConnectors).observe(flow);
+highlight(decisions[0]);
+startCycle();
+
 // Contact form (demo only: no backend, just shows a confirmation)
 const form = document.getElementById("contact-form");
 const status = document.getElementById("form-status");

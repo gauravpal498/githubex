@@ -219,6 +219,143 @@ body {
   margin-bottom: 0.75rem;
 }
 
+/* Data-to-decision flow */
+.section-intro {
+  max-width: 640px;
+  margin: -1rem auto 2.5rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.flow {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+}
+
+.flow-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.flow-lines path {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1.5;
+  transition: stroke 0.3s;
+}
+
+.flow-lines path.active {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+  animation: flow-dash 0.8s linear infinite;
+}
+
+@keyframes flow-dash {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+.flow-stage {
+  display: flex;
+  flex-direction: column;
+}
+
+.flow-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+  background: var(--bg-alt);
+}
+
+.flow-nodes {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.flow-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.flow-node > * {
+  transition: opacity 0.3s;
+}
+
+button.flow-node {
+  cursor: pointer;
+}
+
+.flow-title {
+  font-weight: 600;
+}
+
+.flow-node small {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Dim the content, not the card, so connectors don't show through */
+.flow.has-active .flow-node:not(.active) > * {
+  opacity: 0.45;
+}
+
+.flow .flow-node.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.flow-caption {
+  min-height: 1.6em;
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.flow-caption strong {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-lines path.active {
+    animation: none;
+    stroke-dasharray: none;
+  }
+
+  .flow-lines path,
+  .flow-node,
+  .flow-node > * {
+    transition: none;
+  }
+}
+
 /* Contact form */
 .contact-form {
   max-width: 500px;
@@ -292,5 +429,25 @@ body {
 
   .hero h1 {
     font-size: 2rem;
+  }
+
+  .flow {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .flow-label {
+    align-self: center;
+    padding: 0 0.5rem;
+  }
+
+  .flow-nodes {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .flow-node {
+    flex: 1 1 40%;
+    text-align: center;
   }
 }
