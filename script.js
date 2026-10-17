@@ -307,6 +307,144 @@ timeline.querySelectorAll("[data-step]").forEach((button) => {
 
 showStep(0);
 
+// Savings calculator
+const calculator = document.getElementById("calculator");
+const calcAnnouncer = document.getElementById("calc-announcer");
+const number = new Intl.NumberFormat("en-US");
+const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+const AUTOMATED_SHARE = 0.7;
+const WORKING_WEEKS = 48;
+let calcAnnounceTimer = null;
+
+function calculateSavings() {
+  const { team, hours, rate } = calculator.elements;
+  const hoursSaved = Math.round(team.value * hours.value * WORKING_WEEKS * AUTOMATED_SHARE);
+  const moneySaved = hoursSaved * rate.value;
+
+  document.getElementById("calc-team-value").textContent = team.value;
+  document.getElementById("calc-hours-value").textContent = hours.value;
+  document.getElementById("calc-rate-value").textContent = money.format(rate.value);
+  rate.setAttribute("aria-valuetext", money.format(rate.value));
+  document.getElementById("calc-hours-saved").textContent = number.format(hoursSaved);
+  document.getElementById("calc-money-saved").textContent = money.format(moneySaved);
+
+  return { team: team.value, hours: hours.value, hoursSaved, moneySaved };
+}
+
+calculator.addEventListener("input", () => {
+  const { hoursSaved, moneySaved } = calculateSavings();
+  // Announce the result once the visitor stops moving the slider, not on every step
+  clearTimeout(calcAnnounceTimer);
+  calcAnnounceTimer = setTimeout(() => {
+    calcAnnouncer.textContent = `About ${number.format(hoursSaved)} hours and ${money.format(moneySaved)} saved a year.`;
+  }, 800);
+});
+
+document.getElementById("calc-ask").addEventListener("click", () => {
+  const { team, hours, hoursSaved, moneySaved } = calculateSavings();
+  askAbout({
+    topic: "Data Engineering",
+    message:
+      `We have ${team} people spending about ${hours} hours a week each on manual reporting. ` +
+      `Your calculator estimates ${number.format(hoursSaved)} hours (${money.format(moneySaved)}) saved a year. ` +
+      `Could we get a detailed estimate?`,
+  });
+});
+
+calculateSavings();
+
+// Data maturity quiz
+const quiz = document.getElementById("quiz-form");
+const quizQuestions = [...quiz.querySelectorAll(".quiz-question")];
+const quizResult = quiz.querySelector(".quiz-result");
+const quizBack = document.getElementById("quiz-back");
+const quizNext = document.getElementById("quiz-next");
+const quizError = document.getElementById("quiz-error");
+const quizProgress = document.getElementById("quiz-progress");
+
+// Earlier stages win ties: it's better to fix the foundations first
+const recommendations = {
+  strategy: {
+    title: "Data Strategy",
+    text: "Agree on the numbers that matter and plan a roadmap before you build anything. It saves months of rework later.",
+  },
+  engineering: {
+    title: "Data Engineering",
+    text: "Get your data into one clean, automated place. Everything else, from dashboards to forecasts, depends on it.",
+  },
+  analytics: {
+    title: "Analytics & BI",
+    text: "Your data is there, so put it in front of the people who decide. Self-serve dashboards will replace the manual reports.",
+  },
+  ml: {
+    title: "Machine Learning",
+    text: "Your foundations are solid. Forecasting and segmentation models can now tell you what happens next, not just what happened.",
+  },
+};
+let quizStep = 0;
+let quizAnswer = null;
+
+function answerFor(question) {
+  return question.querySelector("input:checked")?.value;
+}
+
+function showQuizStep(step, moveFocus = true) {
+  quizStep = step;
+  const done = step === quizQuestions.length;
+  quizQuestions.forEach((question, i) => (question.hidden = i !== step));
+  quizResult.hidden = !done;
+  quizBack.hidden = step === 0 || done;
+  quizNext.hidden = done;
+  quizNext.textContent = step === quizQuestions.length - 1 ? "See my result" : "Next";
+  quizError.textContent = "";
+  quizProgress.textContent = done ? "Your result" : `Question ${step + 1} of ${quizQuestions.length}`;
+  quiz.style.setProperty("--quiz-progress", step / quizQuestions.length);
+
+  if (done) {
+    const scores = {};
+    quizQuestions.forEach((question) => {
+      const answer = answerFor(question);
+      scores[answer] = (scores[answer] || 0) + 1;
+    });
+    quizAnswer = Object.keys(recommendations).reduce((best, key) =>
+      (scores[key] || 0) > (scores[best] || 0) ? key : best
+    );
+    quiz.querySelector(".quiz-result-title").textContent = recommendations[quizAnswer].title;
+    quiz.querySelector(".quiz-result-text").textContent = recommendations[quizAnswer].text;
+  }
+
+  if (!moveFocus) return;
+  if (done) quizResult.focus();
+  else (quizQuestions[step].querySelector("input:checked") || quizQuestions[step].querySelector("input")).focus();
+}
+
+quizNext.addEventListener("click", () => {
+  if (!answerFor(quizQuestions[quizStep])) {
+    quizError.textContent = "Please pick an answer to continue.";
+    return;
+  }
+  showQuizStep(quizStep + 1);
+});
+
+quizBack.addEventListener("click", () => showQuizStep(quizStep - 1));
+
+quiz.addEventListener("change", () => (quizError.textContent = ""));
+
+document.getElementById("quiz-restart").addEventListener("click", () => {
+  quiz.reset();
+  showQuizStep(0);
+});
+
+document.getElementById("quiz-ask").addEventListener("click", () => {
+  const { title } = recommendations[quizAnswer];
+  askAbout({
+    topic: title,
+    message: `I took your quiz and it suggested starting with ${title}. Could we talk about what that would look like for us?`,
+  });
+});
+
+showQuizStep(0, false);
+
 // Contact form (demo only: no backend, just shows a confirmation)
 const form = document.getElementById("contact-form");
 const status = document.getElementById("form-status");

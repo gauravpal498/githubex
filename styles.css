@@ -10,6 +10,7 @@
   --input-bg: #ffffff;
   --input-border: #cbd2dc;
   --success: #1a7f45;
+  --error: #c62828;
   --footer-bg: #0f1b33;
   --radius: 8px;
   color-scheme: light;
@@ -27,6 +28,7 @@
     --input-bg: #162033;
     --input-border: #3a465a;
     --success: #4cc38a;
+    --error: #ff8a80;
     --footer-bg: #0a1020;
     color-scheme: dark;
   }
@@ -42,6 +44,7 @@
   --input-bg: #162033;
   --input-border: #3a465a;
   --success: #4cc38a;
+  --error: #ff8a80;
   --footer-bg: #0a1020;
   color-scheme: dark;
 }
@@ -50,6 +53,11 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* Components set display, so make sure [hidden] still hides them */
+[hidden] {
+  display: none !important;
 }
 
 html {
@@ -539,9 +547,193 @@ button.flow-node:focus-visible {
   .flow-node,
   .flow-node > *,
   .timeline-steps::after,
-  .timeline-num {
+  .timeline-num,
+  .quiz-bar span,
+  .quiz-option {
     transition: none;
   }
+}
+
+/* Savings calculator */
+.calculator {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.calc-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.calc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.calc-field span {
+  display: flex;
+  justify-content: space-between;
+}
+
+.calc-field output {
+  color: var(--accent);
+}
+
+.calc-field input[type="range"] {
+  width: 100%;
+  accent-color: var(--primary);
+}
+
+.calc-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.calc-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.calc-number {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.calc-label {
+  color: var(--muted);
+}
+
+.calc-note {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.calc-results .btn {
+  align-self: flex-start;
+}
+
+/* Data maturity quiz */
+.quiz {
+  --quiz-progress: 0;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.quiz-progress {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.quiz-bar {
+  height: 4px;
+  margin: 0.5rem 0 1.5rem;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.quiz-bar span {
+  display: block;
+  height: 100%;
+  width: calc(100% * var(--quiz-progress));
+  background: var(--accent);
+  transition: width 0.3s;
+}
+
+.quiz-question {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.quiz-question legend {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.quiz-option:hover {
+  border-color: var(--accent);
+}
+
+.quiz-option:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--bg-alt);
+}
+
+.quiz-option input {
+  accent-color: var(--primary);
+}
+
+.quiz-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.quiz-nav .btn {
+  margin-left: auto;
+}
+
+.quiz-error {
+  min-height: 1.5em;
+  margin-top: 0.5rem;
+  color: var(--error);
+}
+
+.quiz-result:focus {
+  outline: none;
+}
+
+.quiz-result-label {
+  color: var(--muted);
+}
+
+.quiz-result-title {
+  font-size: 1.6rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.quiz-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
 }
 
 /* Contact form */
@@ -660,6 +852,13 @@ button.flow-node:focus-visible {
 
   .hero h1 {
     font-size: 2rem;
+  }
+  .calculator {
+    grid-template-columns: 1fr;
+  }
+
+  .quiz {
+    padding: 1.25rem;
   }
 }
 

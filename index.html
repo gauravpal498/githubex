@@ -235,6 +235,97 @@
       </div>
     </section>
 
+    <section id="savings" class="section">
+      <div class="container">
+        <h2>What could you save?</h2>
+        <p class="section-intro">Most teams we meet lose hours every week to building reports by hand. Move the sliders to estimate what automating that work could save you.</p>
+        <form class="calculator reveal" id="calculator">
+          <div class="calc-inputs">
+            <label class="calc-field">
+              <span>People building reports <output for="calc-team" id="calc-team-value"></output></span>
+              <input type="range" id="calc-team" name="team" min="1" max="50" value="8">
+            </label>
+            <label class="calc-field">
+              <span>Hours each per week <output for="calc-hours" id="calc-hours-value"></output></span>
+              <input type="range" id="calc-hours" name="hours" min="1" max="20" value="5">
+            </label>
+            <label class="calc-field">
+              <span>Cost per hour <output for="calc-rate" id="calc-rate-value"></output></span>
+              <input type="range" id="calc-rate" name="rate" min="20" max="200" step="5" value="60">
+            </label>
+          </div>
+          <div class="calc-results">
+            <div class="calc-stat">
+              <span class="calc-number" id="calc-hours-saved"></span>
+              <span class="calc-label">hours saved a year</span>
+            </div>
+            <div class="calc-stat">
+              <span class="calc-number" id="calc-money-saved"></span>
+              <span class="calc-label">saved a year</span>
+            </div>
+            <p class="calc-note">Assumes automation removes 70% of manual reporting time, over 48 working weeks.</p>
+            <button type="button" class="btn" id="calc-ask">Get a detailed estimate</button>
+          </div>
+          <p class="visually-hidden" role="status" id="calc-announcer"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="quiz" class="section alt">
+      <div class="container">
+        <h2>Where should you start?</h2>
+        <p class="section-intro">Answer five quick questions and we'll suggest the service that fits where you are today.</p>
+        <form class="quiz reveal" id="quiz-form">
+          <p class="quiz-progress" id="quiz-progress"></p>
+          <div class="quiz-bar" aria-hidden="true"><span></span></div>
+          <fieldset class="quiz-question" data-question="0">
+            <legend>Where does your data live today?</legend>
+            <label class="quiz-option"><input type="radio" name="q0" value="engineering"> Spread across tools and spreadsheets</label>
+            <label class="quiz-option"><input type="radio" name="q0" value="analytics"> In one place, but few people use it</label>
+            <label class="quiz-option"><input type="radio" name="q0" value="ml"> Centralized, clean and trusted</label>
+          </fieldset>
+          <fieldset class="quiz-question" data-question="1" hidden>
+            <legend>Do your teams agree on the key numbers?</legend>
+            <label class="quiz-option"><input type="radio" name="q1" value="strategy"> Not really, everyone reports different figures</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="analytics"> Mostly, but they're slow to get</label>
+            <label class="quiz-option"><input type="radio" name="q1" value="ml"> Yes, our metrics are clearly defined</label>
+          </fieldset>
+          <fieldset class="quiz-question" data-question="2" hidden>
+            <legend>How do leaders get their reports?</legend>
+            <label class="quiz-option"><input type="radio" name="q2" value="analytics"> Someone builds them by hand</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="engineering"> From dashboards that often break or go stale</label>
+            <label class="quiz-option"><input type="radio" name="q2" value="ml"> From self-serve dashboards that just work</label>
+          </fieldset>
+          <fieldset class="quiz-question" data-question="3" hidden>
+            <legend>What's your biggest goal this year?</legend>
+            <label class="quiz-option"><input type="radio" name="q3" value="strategy"> Figure out where to start with data</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="engineering"> Stop wasting time on manual data work</label>
+            <label class="quiz-option"><input type="radio" name="q3" value="ml"> Predict what happens next</label>
+          </fieldset>
+          <fieldset class="quiz-question" data-question="4" hidden>
+            <legend>Who works on data today?</legend>
+            <label class="quiz-option"><input type="radio" name="q4" value="strategy"> Nobody full-time</label>
+            <label class="quiz-option"><input type="radio" name="q4" value="analytics"> An analyst or two</label>
+            <label class="quiz-option"><input type="radio" name="q4" value="ml"> A dedicated data team</label>
+          </fieldset>
+          <div class="quiz-result" hidden tabindex="-1">
+            <p class="quiz-result-label">We'd start with</p>
+            <h3 class="quiz-result-title"></h3>
+            <p class="quiz-result-text"></p>
+            <div class="quiz-actions">
+              <button type="button" class="btn" id="quiz-ask">Send this to us</button>
+              <button type="button" class="link-btn" id="quiz-restart">Start again</button>
+            </div>
+          </div>
+          <div class="quiz-nav">
+            <button type="button" class="link-btn" id="quiz-back">&larr; Back</button>
+            <button type="button" class="btn" id="quiz-next">Next</button>
+          </div>
+          <p class="quiz-error" id="quiz-error" role="alert"></p>
+        </form>
+      </div>
+    </section>
+
     <section id="contact" class="section">
       <div class="container">
         <h2>Get in touch</h2>
