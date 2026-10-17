@@ -17,6 +17,32 @@ navLinks.querySelectorAll("a").forEach((link) => {
   });
 });
 
+// Dark mode toggle (defaults to the OS setting, remembers the visitor's choice)
+const themeToggle = document.querySelector(".theme-toggle");
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+function currentTheme() {
+  return document.documentElement.dataset.theme || (prefersDark.matches ? "dark" : "light");
+}
+
+function updateThemeButton() {
+  const isDark = currentTheme() === "dark";
+  themeToggle.textContent = isDark ? "☀" : "☾";
+  themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+}
+
+themeToggle.addEventListener("click", () => {
+  const next = currentTheme() === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try {
+    localStorage.setItem("theme", next);
+  } catch (e) {}
+  updateThemeButton();
+});
+
+prefersDark.addEventListener("change", updateThemeButton);
+updateThemeButton();
+
 // Contact form (demo only: no backend, just shows a confirmation)
 const form = document.getElementById("contact-form");
 const status = document.getElementById("form-status");
