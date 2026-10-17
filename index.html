@@ -329,10 +329,33 @@
     <section id="contact" class="section">
       <div class="container">
         <h2>Get in touch</h2>
-        <form id="contact-form" class="contact-form reveal">
-          <label>Name <input type="text" name="name" required></label>
-          <label>Email <input type="email" name="email" required></label>
-          <label>How can we help? <textarea name="message" rows="4" required></textarea></label>
+        <form id="contact-form" class="contact-form reveal" novalidate>
+          <div class="field">
+            <label for="contact-name">Name</label>
+            <input type="text" id="contact-name" name="name" autocomplete="name" required aria-describedby="contact-name-error">
+            <p class="field-error" id="contact-name-error"></p>
+          </div>
+          <div class="field">
+            <label for="contact-email">Email</label>
+            <input type="email" id="contact-email" name="email" autocomplete="email" required aria-describedby="contact-email-error">
+            <p class="field-error" id="contact-email-error"></p>
+          </div>
+          <fieldset class="topics">
+            <legend>What are you interested in? <span class="optional">(optional)</span></legend>
+            <div class="topic-list">
+              <label class="topic"><input type="checkbox" name="topic" value="Data Strategy"> Data Strategy</label>
+              <label class="topic"><input type="checkbox" name="topic" value="Data Engineering"> Data Engineering</label>
+              <label class="topic"><input type="checkbox" name="topic" value="Analytics &amp; BI"> Analytics &amp; BI</label>
+              <label class="topic"><input type="checkbox" name="topic" value="Machine Learning"> Machine Learning</label>
+              <label class="topic"><input type="checkbox" name="topic" value="Not sure yet"> Not sure yet</label>
+            </div>
+          </fieldset>
+          <div class="field">
+            <label for="contact-message">How can we help?</label>
+            <textarea id="contact-message" name="message" rows="5" maxlength="1000" required aria-describedby="contact-message-count contact-message-error"></textarea>
+            <p class="field-hint" id="contact-message-count"></p>
+            <p class="field-error" id="contact-message-error"></p>
+          </div>
           <button type="submit" class="btn">Send message</button>
           <p id="form-status" class="form-status" role="status"></p>
         </form>

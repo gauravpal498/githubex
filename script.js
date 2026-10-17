@@ -251,7 +251,9 @@ if (!reduceMotion.matches) {
 }
 
 // "Ask about this" buttons send the visitor to the contact form, pre-filled
-function askAbout({ message }) {
+function askAbout({ topic, message }) {
+  const topicBox = [...form.elements.topic].find((box) => box.value === topic);
+  if (topicBox) topicBox.checked = true;
   const field = form.elements.message;
   field.value = field.value.trim() ? `${field.value.trim()}
 
@@ -448,10 +450,74 @@ showQuizStep(0, false);
 // Contact form (demo only: no backend, just shows a confirmation)
 const form = document.getElementById("contact-form");
 const status = document.getElementById("form-status");
+const messageCount = document.getElementById("contact-message-count");
+const MIN_MESSAGE = 20;
+
+const validators = {
+  name: (field) => (field.value.trim() ? "" : "Please enter your name."),
+  email: (field) => {
+    if (!field.value.trim()) return "Please enter your email.";
+    if (field.validity.typeMismatch) return "Please enter a valid email, like name@company.com.";
+    return "";
+  },
+  message: (field) => {
+    const length = field.value.trim().length;
+    if (!length) return "Please tell us how we can help.";
+    if (length < MIN_MESSAGE) return `Please tell us a bit more (at least ${MIN_MESSAGE} characters).`;
+    return "";
+  },
+};
+
+// Only show a field's errors once the visitor has left it or tried to submit
+const touched = new Set();
+
+function validateField(name) {
+  const field = form.elements[name];
+  const error = validators[name](field);
+  const show = touched.has(name) ? error : "";
+  document.getElementById(`${field.id}-error`).textContent = show;
+  field.toggleAttribute("aria-invalid", Boolean(show));
+  return !error;
+}
+
+function updateCount() {
+  const field = form.elements.message;
+  const length = field.value.length;
+  messageCount.textContent = `${length} / ${field.maxLength} characters`;
+  messageCount.classList.toggle("near-limit", length > field.maxLength * 0.9);
+}
+
+Object.keys(validators).forEach((name) => {
+  const field = form.elements[name];
+  field.addEventListener("blur", () => {
+    if (!field.value && !touched.has(name)) return;
+    touched.add(name);
+    validateField(name);
+  });
+  field.addEventListener("input", () => {
+    if (touched.has(name)) validateField(name);
+  });
+});
+
+form.elements.message.addEventListener("input", updateCount);
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
+  Object.keys(validators).forEach((name) => touched.add(name));
+  const invalid = Object.keys(validators).filter((name) => !validateField(name));
+  if (invalid.length) {
+    status.textContent = "";
+    form.elements[invalid[0]].focus();
+    return;
+  }
+
   const name = form.elements.name.value.trim();
-  status.textContent = `Thanks, ${name}! We'll be in touch soon.`;
+  const topics = [...form.elements.topic].filter((box) => box.checked && box.value !== "Not sure yet");
+  const about = topics.length ? ` about ${topics.map((box) => box.value).join(", ")}` : "";
+  status.textContent = `Thanks, ${name}! We'll be in touch soon${about}.`;
   form.reset();
+  touched.clear();
+  updateCount();
 });
+
+updateCount();

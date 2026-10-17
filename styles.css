@@ -745,11 +745,93 @@ button.flow-node:focus-visible {
   gap: 1rem;
 }
 
-.contact-form label {
+.field {
   display: flex;
   flex-direction: column;
-  font-weight: 600;
   gap: 0.35rem;
+}
+
+.field label,
+.topics legend {
+  font-weight: 600;
+}
+
+.field-hint,
+.field-error {
+  font-size: 0.85rem;
+}
+
+.field-hint {
+  color: var(--muted);
+  text-align: right;
+}
+
+.field-hint.near-limit {
+  color: var(--error);
+}
+
+.field-error {
+  color: var(--error);
+}
+
+.field-error:empty {
+  display: none;
+}
+
+.contact-form [aria-invalid] {
+  border-color: var(--error);
+}
+
+.topics {
+  border: none;
+}
+
+.topics legend {
+  margin-bottom: 0.5rem;
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.topic-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Checkboxes styled as chips; the real input stays focusable for keyboards */
+.topic {
+  position: relative;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.9rem;
+  border: 1px solid var(--input-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.topic input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+
+.topic:hover {
+  border-color: var(--accent);
+}
+
+.topic:has(input:checked) {
+  color: #fff;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.topic:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .contact-form input,
