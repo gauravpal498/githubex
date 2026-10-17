@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumen Data Partners</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="#" class="logo">Lumen<span>Data</span></a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+      <nav class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#approach">Approach</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Turn your data into decisions.</h1>
+        <p>We help growing companies build reliable data pipelines, clear dashboards, and models that answer real business questions.</p>
+        <a href="#contact" class="btn">Book a free consultation</a>
+      </div>
+    </section>
+
+    <section id="services" class="section">
+      <div class="container">
+        <h2>What we do</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Data Strategy</h3>
+            <p>Assess your current data, define the metrics that matter, and plan a roadmap your team can follow.</p>
+          </article>
+          <article class="card">
+            <h3>Data Engineering</h3>
+            <p>Design and build pipelines and warehouses so your data is clean, current, and in one place.</p>
+          </article>
+          <article class="card">
+            <h3>Analytics &amp; BI</h3>
+            <p>Dashboards and reports that give leaders a clear view of performance without digging through spreadsheets.</p>
+          </article>
+          <article class="card">
+            <h3>Machine Learning</h3>
+            <p>Forecasting, segmentation, and predictive models built for production, not just for the slide deck.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="approach" class="section alt">
+      <div class="container">
+        <h2>Our approach</h2>
+        <ol class="steps">
+          <li><strong>Discover</strong> — understand your goals, systems, and constraints.</li>
+          <li><strong>Design</strong> — propose a solution scoped to deliver value fast.</li>
+          <li><strong>Deliver</strong> — build iteratively with regular check-ins.</li>
+          <li><strong>Enable</strong> — train your team so the work lasts after we leave.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container">
+        <h2>Get in touch</h2>
+        <form id="contact-form" class="contact-form">
+          <label>Name <input type="text" name="name" required></label>
+          <label>Email <input type="email" name="email" required></label>
+          <label>How can we help? <textarea name="message" rows="4" required></textarea></label>
+          <button type="submit" class="btn">Send message</button>
+          <p id="form-status" class="form-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> Lumen Data Partners. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
