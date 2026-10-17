@@ -43,6 +43,9 @@ themeToggle.addEventListener("click", () => {
 prefersDark.addEventListener("change", updateThemeButton);
 updateThemeButton();
 
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const scrollBehavior = () => (reduceMotion.matches ? "auto" : "smooth");
+
 // Data-to-decision flow
 const flow = document.querySelector(".flow");
 if (flow) setUpFlow(flow);
@@ -51,7 +54,6 @@ function setUpFlow(flow) {
   const flowLines = flow.querySelector(".flow-lines");
   const flowCaption = document.querySelector(".flow-caption");
   const flowAnnouncer = document.querySelector(".flow-announcer");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   // Keep in sync with the stacked layout breakpoint in styles.css
   const stackedLayout = window.matchMedia("(max-width: 800px)");
 
@@ -191,6 +193,61 @@ function setUpFlow(flow) {
 
   new ResizeObserver(drawConnectors).observe(flow);
   highlight(decisions[0]);
+}
+
+// Highlight the nav link for the section on screen
+const navSections = [...navLinks.querySelectorAll('a[href^="#"]')]
+  .map((link) => ({ link, section: document.querySelector(link.getAttribute("href")) }))
+  .filter(({ section }) => section);
+
+const sectionObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      navSections.forEach(({ link, section }) => {
+        if (section === entry.target) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    });
+  },
+  // Only the band across the middle of the screen counts as "on screen"
+  { rootMargin: "-45% 0px -50% 0px" }
+);
+navSections.forEach(({ section }) => sectionObserver.observe(section));
+
+// Header shadow and back-to-top button, both driven by scroll position
+const header = document.querySelector(".site-header");
+const backToTop = document.querySelector(".back-to-top");
+
+function onScroll() {
+  header.classList.toggle("scrolled", window.scrollY > 8);
+  backToTop.classList.toggle("visible", window.scrollY > window.innerHeight);
+}
+
+window.addEventListener("scroll", onScroll, { passive: true });
+onScroll();
+
+backToTop.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: scrollBehavior() });
+  document.querySelector(".logo").focus({ preventScroll: true });
+});
+
+// Fade content in as it scrolls into view
+if (!reduceMotion.matches) {
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("revealed");
+        revealObserver.unobserve(entry.target);
+      });
+    },
+    { rootMargin: "0px 0px -10% 0px" }
+  );
+  document.querySelectorAll(".reveal").forEach((el) => {
+    el.classList.add("reveal-pending");
+    revealObserver.observe(el);
+  });
 }
 
 // Contact form (demo only: no backend, just shows a confirmation)

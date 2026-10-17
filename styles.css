@@ -52,6 +52,17 @@
   padding: 0;
 }
 
+html {
+  /* Keep anchored sections clear of the sticky header */
+  scroll-padding-top: 64px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color: var(--text);
@@ -72,6 +83,11 @@ body {
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   z-index: 10;
+  transition: box-shadow 0.2s;
+}
+
+.site-header.scrolled {
+  box-shadow: 0 4px 16px rgba(15, 27, 51, 0.12);
 }
 
 .nav {
@@ -102,8 +118,15 @@ body {
   text-decoration: none;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a[aria-current] {
   color: var(--accent);
+}
+
+.nav-links a[aria-current] {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
 }
 
 .nav-toggle {
@@ -175,11 +198,8 @@ body {
 
 /* Sections */
 .section {
-  padding: 4rem 0;
-}
-
-.section {
   --section-bg: var(--bg);
+  padding: 4rem 0;
 }
 
 .section.alt {
@@ -406,6 +426,49 @@ button.flow-node:focus-visible {
 .form-status {
   color: var(--success);
   min-height: 1.5em;
+}
+
+/* Back to top */
+.back-to-top {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 10;
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 1.2rem;
+  color: #fff;
+  background: var(--primary);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(15, 27, 51, 0.25);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.5rem);
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.back-to-top:hover {
+  background: var(--primary-dark);
+}
+
+/* Fade-in on scroll (only added by JS when motion is allowed) */
+.reveal-pending {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.reveal-pending.revealed {
+  opacity: 1;
+  transform: none;
 }
 
 /* Footer */
