@@ -112,18 +112,58 @@
           <article class="card reveal">
             <h3>Data Strategy</h3>
             <p>Assess your current data, define the metrics that matter, and plan a roadmap your team can follow.</p>
+            <details class="card-details">
+              <summary>What's included</summary>
+              <ul>
+                <li>An audit of your data and tools</li>
+                <li>Agreed definitions for your key metrics</li>
+                <li>A 12-month roadmap, ranked by value</li>
+              </ul>
+              <p class="card-length">Typical length: <strong>3–4 weeks</strong></p>
+              <button type="button" class="link-btn" data-ask="Data Strategy">Ask about this</button>
+            </details>
           </article>
           <article class="card reveal">
             <h3>Data Engineering</h3>
             <p>Design and build pipelines and warehouses so your data is clean, current, and in one place.</p>
+            <details class="card-details">
+              <summary>What's included</summary>
+              <ul>
+                <li>Automated pipelines from your key systems</li>
+                <li>A cloud data warehouse set up for you</li>
+                <li>Data quality checks and alerts</li>
+              </ul>
+              <p class="card-length">Typical length: <strong>6–12 weeks</strong></p>
+              <button type="button" class="link-btn" data-ask="Data Engineering">Ask about this</button>
+            </details>
           </article>
           <article class="card reveal">
             <h3>Analytics &amp; BI</h3>
             <p>Dashboards and reports that give leaders a clear view of performance without digging through spreadsheets.</p>
+            <details class="card-details">
+              <summary>What's included</summary>
+              <ul>
+                <li>An executive dashboard</li>
+                <li>Self-serve reports for each team</li>
+                <li>Documentation for every metric</li>
+              </ul>
+              <p class="card-length">Typical length: <strong>4–8 weeks</strong></p>
+              <button type="button" class="link-btn" data-ask="Analytics &amp; BI">Ask about this</button>
+            </details>
           </article>
           <article class="card reveal">
             <h3>Machine Learning</h3>
             <p>Forecasting, segmentation, and predictive models built for production, not just for the slide deck.</p>
+            <details class="card-details">
+              <summary>What's included</summary>
+              <ul>
+                <li>A scoped prototype on your data</li>
+                <li>A model deployed into your tools</li>
+                <li>Monitoring and a retraining plan</li>
+              </ul>
+              <p class="card-length">Typical length: <strong>8–16 weeks</strong></p>
+              <button type="button" class="link-btn" data-ask="Machine Learning">Ask about this</button>
+            </details>
           </article>
         </div>
       </div>
@@ -132,12 +172,66 @@
     <section id="approach" class="section alt">
       <div class="container">
         <h2>Our approach</h2>
-        <ol class="steps reveal">
-          <li><strong>Discover</strong> — understand your goals, systems, and constraints.</li>
-          <li><strong>Design</strong> — propose a solution scoped to deliver value fast.</li>
-          <li><strong>Deliver</strong> — build iteratively with regular check-ins.</li>
-          <li><strong>Enable</strong> — train your team so the work lasts after we leave.</li>
-        </ol>
+        <div class="timeline reveal">
+          <div class="timeline-steps" role="tablist" aria-label="Our approach, step by step">
+            <button type="button" role="tab" class="timeline-step" id="step-discover-tab" aria-controls="step-discover" aria-selected="true">
+              <span class="timeline-num">1</span>
+              <span class="timeline-name">Discover</span>
+            </button>
+            <button type="button" role="tab" class="timeline-step" id="step-design-tab" aria-controls="step-design" aria-selected="false" tabindex="-1">
+              <span class="timeline-num">2</span>
+              <span class="timeline-name">Design</span>
+            </button>
+            <button type="button" role="tab" class="timeline-step" id="step-deliver-tab" aria-controls="step-deliver" aria-selected="false" tabindex="-1">
+              <span class="timeline-num">3</span>
+              <span class="timeline-name">Deliver</span>
+            </button>
+            <button type="button" role="tab" class="timeline-step" id="step-enable-tab" aria-controls="step-enable" aria-selected="false" tabindex="-1">
+              <span class="timeline-num">4</span>
+              <span class="timeline-name">Enable</span>
+            </button>
+          </div>
+          <div role="tabpanel" class="timeline-panel" id="step-discover" aria-labelledby="step-discover-tab">
+            <h3>1. Discover <span class="timeline-length">Weeks 1–2</span></h3>
+            <p>We interview your team, map your systems and data, and agree on what success looks like.</p>
+            <ul>
+              <li>Stakeholder interviews</li>
+              <li>Systems and data inventory</li>
+              <li>Success metrics everyone signs off</li>
+            </ul>
+          </div>
+          <div role="tabpanel" class="timeline-panel" id="step-design" aria-labelledby="step-design-tab">
+            <h3>2. Design <span class="timeline-length">Weeks 2–3</span></h3>
+            <p>We propose a solution scoped to deliver value fast, starting with one quick win.</p>
+            <ul>
+              <li>Architecture and scope</li>
+              <li>A first quick win, chosen together</li>
+              <li>A delivery plan with milestones</li>
+            </ul>
+          </div>
+          <div role="tabpanel" class="timeline-panel" id="step-deliver" aria-labelledby="step-deliver-tab">
+            <h3>3. Deliver <span class="timeline-length">4–12 weeks</span></h3>
+            <p>We build in two-week sprints, with a working demo at the end of every sprint.</p>
+            <ul>
+              <li>Two-week sprints</li>
+              <li>A demo every sprint</li>
+              <li>Your feedback built into the next sprint</li>
+            </ul>
+          </div>
+          <div role="tabpanel" class="timeline-panel" id="step-enable" aria-labelledby="step-enable-tab">
+            <h3>4. Enable <span class="timeline-length">Final 2 weeks</span></h3>
+            <p>We train your team so the work lasts after we leave.</p>
+            <ul>
+              <li>Hands-on training sessions</li>
+              <li>Documentation your team can maintain</li>
+              <li>30 days of support after handover</li>
+            </ul>
+          </div>
+          <div class="timeline-nav">
+            <button type="button" class="link-btn" data-step="-1">&larr; Previous step</button>
+            <button type="button" class="link-btn" data-step="1">Next step &rarr;</button>
+          </div>
+        </div>
       </div>
     </section>
 

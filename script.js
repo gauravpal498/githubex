@@ -250,6 +250,63 @@ if (!reduceMotion.matches) {
   });
 }
 
+// "Ask about this" buttons send the visitor to the contact form, pre-filled
+function askAbout({ message }) {
+  const field = form.elements.message;
+  field.value = field.value.trim() ? `${field.value.trim()}
+
+${message}` : message;
+  field.dispatchEvent(new Event("input"));
+  document.getElementById("contact").scrollIntoView({ behavior: scrollBehavior() });
+  field.focus({ preventScroll: true });
+}
+
+document.querySelectorAll("[data-ask]").forEach((button) => {
+  button.addEventListener("click", () => {
+    askAbout({
+      topic: button.dataset.ask,
+      message: `I'd like to know more about ${button.dataset.ask}.`,
+    });
+  });
+});
+
+// Approach timeline (tabs: arrow keys move between steps)
+const timelineTabs = [...document.querySelectorAll(".timeline-step")];
+const timelinePanels = timelineTabs.map((tab) => document.getElementById(tab.getAttribute("aria-controls")));
+const timeline = document.querySelector(".timeline");
+let currentStep = 0;
+
+function showStep(index, moveFocus = false) {
+  currentStep = (index + timelineTabs.length) % timelineTabs.length;
+  timelineTabs.forEach((tab, i) => {
+    const selected = i === currentStep;
+    tab.setAttribute("aria-selected", selected);
+    tab.tabIndex = selected ? 0 : -1;
+    tab.classList.toggle("done", i < currentStep);
+    timelinePanels[i].hidden = !selected;
+  });
+  timeline.style.setProperty("--progress", currentStep / (timelineTabs.length - 1));
+  timeline.querySelector('[data-step="-1"]').disabled = currentStep === 0;
+  timeline.querySelector('[data-step="1"]').disabled = currentStep === timelineTabs.length - 1;
+  if (moveFocus) timelineTabs[currentStep].focus();
+}
+
+timelineTabs.forEach((tab, i) => {
+  tab.addEventListener("click", () => showStep(i));
+  tab.addEventListener("keydown", (event) => {
+    const moves = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: -1 };
+    if (!(event.key in moves)) return;
+    event.preventDefault();
+    showStep(moves[event.key], true);
+  });
+});
+
+timeline.querySelectorAll("[data-step]").forEach((button) => {
+  button.addEventListener("click", () => showStep(currentStep + Number(button.dataset.step)));
+});
+
+showStep(0);
+
 // Contact form (demo only: no backend, just shows a confirmation)
 const form = document.getElementById("contact-form");
 const status = document.getElementById("form-status");

@@ -217,6 +217,8 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 1.25rem;
+  /* Opening one card's details shouldn't stretch its neighbours */
+  align-items: start;
 }
 
 .card {
@@ -234,14 +236,157 @@ body {
   color: var(--muted);
 }
 
-.steps {
-  max-width: 600px;
-  margin: 0 auto;
-  padding-left: 1.25rem;
+.card-details {
+  margin-top: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
 }
 
-.steps li {
-  margin-bottom: 0.75rem;
+.card-details summary {
+  font-weight: 600;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.card-details ul {
+  margin: 0.75rem 0 0.5rem 1.1rem;
+  color: var(--muted);
+}
+
+.card-details .card-length {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.link-btn {
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+.link-btn:disabled {
+  color: var(--muted);
+  text-decoration: none;
+  cursor: default;
+}
+
+/* Approach timeline */
+.timeline {
+  --progress: 0;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.timeline-steps {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+/* Track behind the step numbers, filled up to the current step */
+.timeline-steps::before,
+.timeline-steps::after {
+  content: "";
+  position: absolute;
+  top: 1.2rem;
+  left: 12.5%;
+  height: 3px;
+  background: var(--border);
+  width: 75%;
+}
+
+.timeline-steps::after {
+  background: var(--accent);
+  width: calc(75% * var(--progress));
+  transition: width 0.3s;
+}
+
+.timeline-step {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+  font: inherit;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.timeline-num {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--section-bg);
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.timeline-step.done .timeline-num {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.timeline-step[aria-selected="true"] {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.timeline-step[aria-selected="true"] .timeline-num {
+  color: #fff;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.timeline-step:hover .timeline-num {
+  border-color: var(--accent);
+}
+
+.timeline-panel {
+  padding: 1.5rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.timeline-panel h3 {
+  margin-bottom: 0.5rem;
+}
+
+.timeline-length {
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.timeline-panel ul {
+  margin: 0.75rem 0 0 1.1rem;
+  color: var(--muted);
+}
+
+.timeline-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
 }
 
 /* Data-to-decision flow */
@@ -392,7 +537,9 @@ button.flow-node:focus-visible {
 
   .flow-lines path,
   .flow-node,
-  .flow-node > * {
+  .flow-node > *,
+  .timeline-steps::after,
+  .timeline-num {
     transition: none;
   }
 }
